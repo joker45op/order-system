@@ -1,26 +1,38 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
+import { useState, useEffect } from "react";
 import "./App.css";
-import burger from "./assets/burger.png";
 import AddedCart from "./components/AddedCart";
 import MenuItem from "./components/MenuItem";
+
+import "./assets/Icons/cart.svg";
+
 import { store } from "./utils/store";
+import axios from "axios";
 
 function App() {
-  const { order } = store();
+  const { serverUrl, order, categories, setCategoriesData } = store();
+  // let categories = [1, 2, 3, 4, 5, 6];
 
-  let categories = [1, 2, 3, 4, 5, 6];
+  // const [categoriesData, setCategoriesData] = useState([]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      const result = await axios.get(serverUrl + "/api/categories");
+      console.log(result.data);
+      setCategoriesData(result.data);
+    };
+    fetchCategories();
+  }, []);
+
+  // categories = categoriesData.map((item) => item.id);
 
   return (
     <div className="lg:flex lg:justify-center">
       <div className="h-screen flex flex-col bg-[#fffbf6] lg:w-1/4">
         <div className="flex flex-row w-full h-36 overflow-x-scroll bg-white">
-          {/* <div className="flex space-x-4 px-4"> */}
-          {categories.map((item, index) => {
+          {categories?.map((item, index) => {
             return (
               <div
-                key={item}
+                key={index}
                 className={`flex flex-col h-full border-r-[0.5px] border-b-4 pt-1.5 px-5 ${
                   index < categories.length - 1 ? "border-r-orange-800" : ""
                 } ${
@@ -28,16 +40,19 @@ function App() {
                 } place-content-center`}
               >
                 <img
-                  src={burger}
+                  src={`${serverUrl}/assets/images/${item.image}`}
+                  // src={burger}
+                  // src={""}
                   className="h-10 w-10 min-h-10 min-w-10"
                   alt="react"
                 />
-                <div className="text-sm p-0">lorem</div>
+                {console.log(`111`)}
+                <div className="text-sm p-0 capitalize">{item.name}</div>
               </div>
             );
           })}
-
           {/* </div> */}
+          {/* {console.log(categories)} */}
         </div>
 
         <div className="flex justify-items-start p-3 space-x-3 border-b border-b-orange-500">

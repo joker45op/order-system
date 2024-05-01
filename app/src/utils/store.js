@@ -1,6 +1,8 @@
 import { create } from "zustand";
 
 const initState = {
+  serverUrl: "http://localhost:5000",
+  categories: [],
   order: [
     { item: 1, quantity: 1 },
     { item: 2, quantity: 2 },
@@ -10,6 +12,9 @@ const initState = {
 
 export const store = create((set, get) => ({
   ...initState,
+
+  setCategoriesData: (data) => set({ categories: data }),
+
   addOrder: (item) => {
     set((state) => {
       const existingItemIndex = state.order.findIndex(
